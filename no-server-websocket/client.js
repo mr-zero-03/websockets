@@ -39,4 +39,4 @@ function createSocket() {
 
 }
 
-createSocket();
+window.addEventListener( 'load', createSocket );

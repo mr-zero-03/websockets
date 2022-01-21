@@ -5,6 +5,8 @@
 const wsServer = require( './libs/wss-core' );
 const server = require( './libs/server-core' );
 
+const fs = require( 'fs' );
+
 const host = 'localhost';
 const port = 3000;
 
@@ -30,7 +32,7 @@ function connectionCallback( socket ) {
 function processGets( res, urlPath, GET ) {
   if ( urlPath.includes( '/send-message' ) ) { //This have to be called by the client
 
-    if( GET.language === undefined ) { GET.language = ''; }
+    if( GET.language === undefined ) { GET.language = 'Not selected yet'; }
 
     const language = GET.language;
 
@@ -64,7 +66,10 @@ function processGets( res, urlPath, GET ) {
     res.end( html );
 
   } else {
-    res.end( 'Run the Client script to connect to the Server. Then go the the send-message endpoint' );
+    const javaScript = fs.readFileSync( __dirname + '/client.js' ).toString();
+
+    res.writeHead( 200, { 'Content-Type': 'text/html' } );
+    res.end( '<html> <body><p>Runing the Client script to connect to the Server :D</p> <script>' + javaScript + '</script> </body> <html>' );
   }
 }
 
